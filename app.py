@@ -173,7 +173,8 @@ def temperature():
     List_Temper=[]
     for station, date, temp in query_temperatute:
         dic_Temper={}
-        dic_Temper[date]=temp
+        dic_Temper['Date']=date
+        dic_Temper['Measurement']=temp
         List_Temper.append(dic_Temper)
 
    
