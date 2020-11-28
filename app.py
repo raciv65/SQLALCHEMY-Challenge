@@ -255,8 +255,7 @@ def temperature_range_start_end(start, end):
     
     #Return JOSN
     return jsonify(List_TemperStartEnd)
-    session.close()
-
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
