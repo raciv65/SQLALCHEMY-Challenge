@@ -42,11 +42,11 @@ app=Flask(__name__)
 
 @app.route("/")
 def home():
-    """List all available api routes."""
+    #List all available api routes.
     return  (
         f'<h1>Available Routes</h1>'
         f'''
-            <ul>
+        <ul>
         <p>
             <li>/api/v1.0/precipitation</li></li>
         </p>
@@ -126,7 +126,9 @@ def station():
     List_Station=[]
     for name, station in query_station:
         dic_Station={}
-        dic_Station[station]=name
+        dic_Station['Station']=station
+        dic_Station['Name']=name
+
         List_Station.append(dic_Station)
 
     #Return JSON
@@ -176,7 +178,11 @@ def temperature():
 
    
     #Return JSON   
-    return jsonify(List_Temper)
+    return jsonify(
+        Station=f'{query_stationMostActive[0][0]}',
+        Temperature=List_Temper
+        )
+    
 
 #/api/v1.0/<start>
 #Return a JSON list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end range.
@@ -203,10 +209,10 @@ def temperature_range_start(start):
     List_TemperStart=[]
     for date, min, avg, max in query_start:
         dic_TemperStart={}
-        dic_TemperStart['01. Date']=date
-        dic_TemperStart['Min Temp']=round(min,2)
-        dic_TemperStart['Avg Tem']=round(avg,2)
-        dic_TemperStart['Max Temp']=round(max,2)
+        dic_TemperStart['Date']=date
+        dic_TemperStart['Temp Min']=round(min,2)
+        dic_TemperStart['Tem Avg']=round(avg,2)
+        dic_TemperStart['Temp Max']=round(max,2)
         List_TemperStart.append(dic_TemperStart)
 
    
@@ -239,10 +245,10 @@ def temperature_range_start_end(start, end):
     List_TemperStartEnd=[]
     for date, min, avg, max in query_start_end:
         dic_TemperStartEnd={}
-        dic_TemperStartEnd['01. Date']=date
-        dic_TemperStartEnd['Min Temp']=round(min,2)
-        dic_TemperStartEnd['Avg Tem']=round(avg,2)
-        dic_TemperStartEnd['Max Temp']=round(max,2)
+        dic_TemperStartEnd['Date']=date
+        dic_TemperStartEnd['Temp Min']=round(min,2)
+        dic_TemperStartEnd['Tem Avg']=round(avg,2)
+        dic_TemperStartEnd['Temp Max']=round(max,2)
         List_TemperStartEnd.append(dic_TemperStartEnd)
 
     
