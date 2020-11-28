@@ -43,13 +43,28 @@ app=Flask(__name__)
 @app.route("/")
 def home():
     """List all available api routes."""
-    return (
-        f"Available Routes:<br/>"
-        f"/api/v1.0/precipitation<br/>"
-        f"/api/v1.0/stations<br/>"
-        f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/&lt;start&gt;             (i.e. /api/v1.0/2016-08-01) <br/>"        
-        f"/api/v1.0/&lt;start&gt;/&lt;end&gt; (i.e. /api/v1.0/2016-08-01/2017-05-15)<br/>"
+    return  (
+        f'<h1>Available Routes</h1>'
+        f'''
+            <ul>
+        <p>
+            <li>/api/v1.0/precipitation</li></li>
+        </p>
+        <p>
+            <li>/api/v1.0/stations</li>
+        </p>
+        <p>
+            <li>/api/v1.0/tobs</li>
+        </p>
+        <p>
+            <li>/api/v1.0/&lt;start&gt;             (i.e. /api/v1.0/2016-08-01)</li>
+        </p>
+        <p>
+            <li>/api/v1.0/&lt;start&gt;/&lt;end&gt; (i.e. /api/v1.0/2016-08-01/2017-05-15)</li>
+        </p>
+        </ul>
+        '''
+
     )
 
 #/api/v1.0/precipitation
@@ -75,6 +90,10 @@ def precipitation():
     .filter(Measurement.date>=target)
     .group_by(Measurement.date).all()
     )
+
+    #Close session of the data base
+    session.close()
+
 #auxiliar to make a dict for jsonify
     List_Precipation=[]    
 
@@ -83,7 +102,8 @@ def precipitation():
         dictionary[date]=round(prcp,2)
         List_Precipation.append(dictionary)
 
-    session.close()
+
+    #Return JSON
     return jsonify(List_Precipation)
 
 #/api/v1.0/stations
@@ -98,6 +118,9 @@ def station():
     .filter(Measurement.station==Station.station)
     .group_by(Measurement.station).all()
     )
+
+#Close the session
+    session.close()
 ##auxiliar to make a dict for jsonify
 
     List_Station=[]
@@ -105,8 +128,8 @@ def station():
         dic_Station={}
         dic_Station[station]=name
         List_Station.append(dic_Station)
-#Close the session
-    session.close()
+
+    #Return JSON
     return jsonify(List_Station)
     
 #/api/v1.0/tobs
@@ -141,6 +164,8 @@ def temperature():
         .filter(Measurement.date>=target).all()
     )
     
+     #Close the session
+    session.close() 
     ##auxiliar to make a dict for jsonify
 
     List_Temper=[]
@@ -149,7 +174,8 @@ def temperature():
         dic_Temper[date]=temp
         List_Temper.append(dic_Temper)
 
-    session.close()    
+   
+    #Return JSON   
     return jsonify(List_Temper)
 
 #/api/v1.0/<start>
@@ -159,6 +185,7 @@ def temperature():
 def temperature_range_start(start):
     session=Session(engine)
 
+    #Transform in data type
     start=dt.datetime.strptime(start,'%Y-%m-%d')
 
     query_start=(
@@ -167,6 +194,9 @@ def temperature_range_start(start):
         .filter(Measurement.date >= start)
         .group_by(Measurement.date).all()
     )
+
+     #Close the session
+    session.close()
 
  ##auxiliar to make a dict for jsonify
 
@@ -179,7 +209,8 @@ def temperature_range_start(start):
         dic_TemperStart['Max Temp']=round(max,2)
         List_TemperStart.append(dic_TemperStart)
 
-    session.close()
+   
+    #Return JOSN
     return jsonify(List_TemperStart)
 
 #/api/v1.0/<start>/<end>
@@ -189,6 +220,7 @@ def temperature_range_start(start):
 def temperature_range_start_end(start, end):
     session=Session(engine)
 
+    #Transform in data type
     start=dt.datetime.strptime(start,'%Y-%m-%d')
     end=dt.datetime.strptime(end,'%Y-%m-%d')
 
@@ -199,6 +231,9 @@ def temperature_range_start_end(start, end):
         .filter(Measurement.date <= end)
         .group_by(Measurement.date).all()
     )
+
+    #Close the session
+    session.close()
     #auxiliar to make a dict for jsonify
 
     List_TemperStartEnd=[]
@@ -210,7 +245,8 @@ def temperature_range_start_end(start, end):
         dic_TemperStartEnd['Max Temp']=round(max,2)
         List_TemperStartEnd.append(dic_TemperStartEnd)
 
-    session.close()
+    
+    #Return JOSN
     return jsonify(List_TemperStartEnd)
     session.close()
 
